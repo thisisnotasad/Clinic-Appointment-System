@@ -11,6 +11,12 @@
     <a href="add_doctor.php" class="btn btn-success btn-lg px-4">
         Add New Doctor
     </a>
+    <a href="doctors.php" class="btn btn-info btn-lg px-4 ms-3">
+    Manage Doctors
+</a>
+    <a href="patients.php" class="btn btn-primary btn-lg px-4 ms-3">
+        Manage Patients
+    </a>
 </div>
 
 <?php require_once '../includes/auth.php'; ?>
