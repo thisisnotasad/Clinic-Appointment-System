@@ -101,22 +101,43 @@ document.getElementById('appointmentDate').addEventListener('change', function()
             const slotsDiv = document.getElementById('timeSlots');
             slotsDiv.innerHTML = '';
 
-            if (data.slots.length === 0) {
-                slotsDiv.innerHTML = '<div class="col-12"><div class="alert alert-warning">No slots available on this date</div></div>';
-            } else {
-                data.slots.forEach(slot => {
-                    const isBooked = data.booked.includes(slot);
-                    slotsDiv.innerHTML += `
-                        <div class="col-md-3">
-                            <button class="btn ${isBooked ? 'btn-secondary' : 'btn-outline-primary'} w-100 p-3" 
-                                    ${isBooked ? 'disabled' : ''} 
-                                    onclick="selectSlot('${slot}')">
-                                ${slot}
-                                ${isBooked ? '<br><small>Booked</small>' : ''}
-                            </button>
-                        </div>`;
-                });
-            }
+            // if (data.slots.length === 0) {
+            //     slotsDiv.innerHTML = '<div class="col-12"><div class="alert alert-warning">No slots available on this date</div></div>';
+            // } else {
+            //     data.slots.forEach(slot => {
+            //         const isBooked = data.booked.includes(slot);
+            //         slotsDiv.innerHTML += `
+            //             <div class="col-md-3">
+            //                 <button class="btn ${isBooked ? 'btn-secondary' : 'btn-outline-primary'} w-100 p-3" 
+            //                         ${isBooked ? 'disabled' : ''} 
+            //                         onclick="selectSlot('${slot}')">
+            //                     ${slot}
+            //                     ${isBooked ? '<br><small>Booked</small>' : ''}
+            //                 </button>
+            //             </div>`;
+            //     });
+            // }
+
+            if (data.on_leave) {
+    slotsDiv.innerHTML = '<div class="col-12"><div class="alert alert-danger"><strong>Doctor is on leave</strong> on this date.</div></div>';
+} else if (data.slots.length === 0) {
+    slotsDiv.innerHTML = '<div class="col-12"><div class="alert alert-warning">No schedule set for this date</div></div>';
+} else {
+    data.slots.forEach(slot => {
+        const isBooked = data.booked.includes(slot);
+        slotsDiv.innerHTML += `
+            <div class="col-md-3">
+                <button class="btn ${isBooked ? 'btn-secondary' : 'btn-outline-primary'} w-100 p-3" 
+                        ${isBooked ? 'disabled' : ''} 
+                        onclick="selectSlot('${slot}')">
+                    ${slot}
+                    ${isBooked ? '<br><small>Booked</small>' : ''}
+                </button>
+            </div>`;
+    });
+}
+
+
             container.style.display = 'block';
             document.getElementById('bookingBtnContainer').style.display = data.slots.length > 0 ? 'block' : 'none';
         });

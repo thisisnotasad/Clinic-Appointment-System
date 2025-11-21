@@ -22,6 +22,11 @@ $stmt->execute();
 $doctor_id = $stmt->get_result()->fetch_assoc()['doctor_id'];
 ?>
 
+<div class="mt-4">
+    <a href="schedule.php" class="btn btn-primary btn-lg me-3">Set Weekly Schedule</a>
+    <a href="leaves.php" class="btn btn-warning btn-lg">Manage Leaves</a>
+</div>
+
 <h2 class="mb-4">
     Today's Appointments 
     <small class="text-muted">(<?= date('d M Y') ?>)</small>

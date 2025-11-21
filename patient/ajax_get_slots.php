@@ -1,6 +1,5 @@
 <?php
 require_once '../includes/db_connect.php';
-
 header('Content-Type: application/json');
 
 $doctor_id = $_GET['doctor_id'] ?? 0;
@@ -11,7 +10,20 @@ if (!$doctor_id || !$date) {
     exit;
 }
 
-// Get doctor's schedule for that day of week
+// FIRST: Check if doctor has marked this date as LEAVE
+$leave_check = $conn->prepare("SELECT leave_id FROM doctor_leaves WHERE doctor_id = ? AND leave_date = ?");
+$leave_check->bind_param("is", $doctor_id, $date);
+$leave_check->execute();
+$leave_check->store_result();
+
+if ($leave_check->num_rows > 0) {
+    // Doctor is on leave → NO SLOTS
+    echo json_encode(['slots' => [], 'booked' => [], 'on_leave' => true]);
+    exit;
+}
+$leave_check->close();
+
+// Continue with normal schedule check
 $day_of_week = date('w', strtotime($date)); // 0=Sun, 1=Mon...
 
 $stmt = $conn->prepare("
@@ -29,14 +41,13 @@ $booked = [];
 if ($sched) {
     $start = strtotime($sched['start_time']);
     $end   = strtotime($sched['end_time']);
-    $duration = $sched['slot_duration'] * 60; // minutes to seconds
+    $duration = $sched['slot_duration'] * 60;
 
     for ($time = $start; $time < $end; $time += $duration) {
-        $slot = date('h:i A', $time);
-        $slots[] = $slot;
+        $slots[] = date('h:i A', $time);
     }
 
-    // Check which slots are already booked
+    // Check booked slots
     $stmt2 = $conn->prepare("
         SELECT appointment_time 
         FROM appointments 
@@ -53,6 +64,7 @@ if ($sched) {
 
 echo json_encode([
     'slots' => $slots,
-    'booked' => $booked
+    'booked' => $booked,
+    'on_leave' => false
 ]);
 ?>
