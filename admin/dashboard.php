@@ -7,6 +7,11 @@
         Welcome, <strong><?= htmlspecialchars($_SESSION['full_name']) ?></strong>! You are logged in as <strong>Administrator</strong>.
     </div>
 </div>
+<div class="mt-4 mb-5 text-center">
+    <a href="add_doctor.php" class="btn btn-success btn-lg px-4">
+        Add New Doctor
+    </a>
+</div>
 
 <?php require_once '../includes/auth.php'; ?>
 <?php require_once '../includes/header.php'; ?>
