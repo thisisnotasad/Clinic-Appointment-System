@@ -27,6 +27,12 @@ $doctor_id = $stmt->get_result()->fetch_assoc()['doctor_id'];
     <a href="leaves.php" class="btn btn-warning btn-lg">Manage Leaves</a>
 </div>
 
+<div class="col-md-12 mt-3">
+        <a href="profile.php" class="btn btn-outline-secondary btn-lg w-100 p-4">
+            Edit Profile
+        </a>
+    </div>
+
 <h2 class="mb-4">
     Today's Appointments 
     <small class="text-muted">(<?= date('d M Y') ?>)</small>
