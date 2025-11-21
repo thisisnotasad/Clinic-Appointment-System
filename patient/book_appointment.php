@@ -101,22 +101,6 @@ document.getElementById('appointmentDate').addEventListener('change', function()
             const slotsDiv = document.getElementById('timeSlots');
             slotsDiv.innerHTML = '';
 
-            // if (data.slots.length === 0) {
-            //     slotsDiv.innerHTML = '<div class="col-12"><div class="alert alert-warning">No slots available on this date</div></div>';
-            // } else {
-            //     data.slots.forEach(slot => {
-            //         const isBooked = data.booked.includes(slot);
-            //         slotsDiv.innerHTML += `
-            //             <div class="col-md-3">
-            //                 <button class="btn ${isBooked ? 'btn-secondary' : 'btn-outline-primary'} w-100 p-3" 
-            //                         ${isBooked ? 'disabled' : ''} 
-            //                         onclick="selectSlot('${slot}')">
-            //                     ${slot}
-            //                     ${isBooked ? '<br><small>Booked</small>' : ''}
-            //                 </button>
-            //             </div>`;
-            //     });
-            // }
 
             if (data.on_leave) {
     slotsDiv.innerHTML = '<div class="col-12"><div class="alert alert-danger"><strong>Doctor is on leave</strong> on this date.</div></div>';
@@ -150,21 +134,62 @@ function selectSlot(slot) {
     event.target.classList.add('btn-primary');
 }
 
+// document.getElementById('bookBtn').addEventListener('click', function() {
+//     const doctorId = document.getElementById('doctor').value;
+//     const date = document.getElementById('appointmentDate').value;
+
+//     fetch('process_booking.php', {
+//         method: 'POST',
+//         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+//         body: `doctor_id=${doctorId}&date=${date}&time=${selectedSlot}`
+//     })
+//     .then(r => r.json())
+//     .then(res => {
+//         alert(res.success ? 'Appointment booked successfully!' : res.error);
+//         if (res.success) location.reload();
+//     });
+// });
+
+
 document.getElementById('bookBtn').addEventListener('click', function() {
     const doctorId = document.getElementById('doctor').value;
     const date = document.getElementById('appointmentDate').value;
+    const time = selectedSlot;
+
+    // Show loading
+    this.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Booking...';
+    this.disabled = true;
 
     fetch('process_booking.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: `doctor_id=${doctorId}&date=${date}&time=${selectedSlot}`
+        body: `doctor_id=${doctorId}&date=${date}&time=${time}`
     })
     .then(r => r.json())
     .then(res => {
-        alert(res.success ? 'Appointment booked successfully!' : res.error);
-        if (res.success) location.reload();
+        if (res.success) {
+            // SUCCESS ANIMATION
+            document.getElementById('bookingBtnContainer').innerHTML = `
+                <div class="alert alert-success text-center p-4">
+                    <h4>Booked Successfully!</h4>
+                    <p>${res.message || 'Check your email for confirmation.'}</p>
+                    <button class="btn btn-primary mt-3" onclick="location.reload()">Book Another</button>
+                </div>`;
+        } else {
+            alert(res.error || 'Booking failed');
+            this.innerHTML = 'Confirm Booking';
+            this.disabled = false;
+        }
+    })
+    .catch(() => {
+        alert('Network error. Try again.');
+        this.innerHTML = 'Confirm Booking';
+        this.disabled = false;
     });
 });
+
+
+
 </script>
 
 <?php require_once '../includes/footer.php'; ?>

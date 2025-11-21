@@ -1,10 +1,3 @@
-<!-- </div>
-    <footer class="bg-dark text-white text-center py-4 mt-5">
-        <p>&copy; <?= date('Y') ?> MediCare Clinic System</p>
-    </footer>
-</body>
-</html> -->
-
 </div> <!-- End of container from header.php -->
 
 <!-- Bootstrap 5 JS + Popper (REQUIRED for modals, dropdowns, etc.) -->
