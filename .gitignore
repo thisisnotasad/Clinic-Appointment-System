@@ -1,8 +1,2 @@
 Schema/
-# Ignore configuration files
-config.php
-# Ignore database connection files
-includes/db_connect.php
-# Ignore sensitive directories
-auth/
 
