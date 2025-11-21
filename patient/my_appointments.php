@@ -48,6 +48,9 @@
                             Cancel
                         </a>
                     <?php endif; ?>
+                    <a href="print_ticket.php?id=<?= $row['appointment_id'] ?>" 
+                       class="btn btn-sm btn-primary" target="_blank">
+                        Print Ticket
                 </td>
             </tr>
             <?php endwhile; ?>

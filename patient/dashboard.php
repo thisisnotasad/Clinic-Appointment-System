@@ -7,11 +7,23 @@
         Welcome, <strong><?= htmlspecialchars($_SESSION['full_name']) ?></strong>! You are logged in as <strong>Patient</strong>.
     </div>
 </div>
-<a href="book_appointment.php" class="btn btn-primary btn-lg px-5">
-    <i class="fas fa-calendar-plus"></i> Book New Appointment
-</a>
-<a href="my_appointments.php" class="btn btn-info btn-lg px-5 ms-3">
-    <i class="fas fa-list"></i> My Appointments
-</a>
+
+<div class="row mt-4 g-3">
+    <div class="col-md-6">
+        <a href="book_appointment.php" class="btn btn-primary btn-lg w-100 p-4">
+            Book New Appointment
+        </a>
+    </div>
+    <div class="col-md-6">
+        <a href="my_appointments.php" class="btn btn-info btn-lg w-100 p-4 text-white">
+            View My Appointments
+        </a>
+    </div>
+    <div class="col-md-12 mt-3">
+        <a href="profile.php" class="btn btn-outline-secondary btn-lg w-100 p-4">
+            Edit Profile
+        </a>
+    </div>
+</div>
 
 <?php require_once '../includes/footer.php'; ?>
