@@ -1,4 +1,3 @@
-<!-- print_ticket.php -->
 <?php
 require_once '../includes/auth.php';
 require_once '../includes/db_connect.php';
@@ -26,21 +25,48 @@ if (!$apt) die("Invalid ticket");
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <style>
+        /* --- PRINT SPECIFIC STYLES --- */
         @media print {
+            @page {
+                margin: 0.5cm; /* Minimize browser default margins */
+                size: auto;
+            }
+            
             body { 
                 margin: 0; 
-                padding: 0;
+                padding: 0 !important;
                 background: white !important;
+                display: block !important; /* Removes flex centering issues in print */
             }
+
             .no-print { display: none !important; }
+            
             .ticket-container { 
                 box-shadow: none !important;
-                border: 2px solid #333 !important;
-                margin: 0 !important;
+                border: 2px solid #000 !important;
+                margin: 0 auto !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                page-break-inside: avoid; /* Prevents cutting the ticket in half */
             }
-            .action-buttons { display: none !important; }
+
+            /* COMPACTING CONTENT FOR PRINT */
+            .ticket-header { padding: 1rem !important; }
+            .clinic-logo { font-size: 1.8rem !important; margin-bottom: 0.5rem !important; }
+            .ticket-body { padding: 1.5rem !important; }
+            .token-number { margin: 10px 0 !important; padding: 10px !important; font-size: 1.2rem !important; }
+            .info-item { padding: 5px 0 !important; border-bottom: 1px solid #ddd !important; }
+            .instructions { margin-top: 1rem !important; padding: 10px !important; }
+            .footer-note { margin-top: 1rem !important; padding-top: 0.5rem !important; }
+            
+            /* Force background colors to show in print */
+            .ticket-header, .token-number, .badge {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
         }
         
+        /* --- SCREEN STYLES --- */
         body {
             background: linear-gradient(135deg, #f8f9ff 0%, #e6ecff 100%);
             min-height: 100vh;
@@ -91,7 +117,7 @@ if (!$apt) die("Invalid ticket");
         }
         
         .info-section {
-            margin-bottom: 2rem;
+            margin-bottom: 1rem; /* Reduced slightly */
         }
         
         .info-item {
@@ -169,8 +195,8 @@ if (!$apt) die("Invalid ticket");
             font-weight: 600;
             color: white;
             transition: all 0.3s ease;
-
-
+            width: 100%;
+            height: 50%;
         }
         
         .btn-close {
@@ -181,6 +207,8 @@ if (!$apt) die("Invalid ticket");
             font-weight: 600;
             color: white;
             transition: all 0.3s ease;
+            width: 90%;
+            height: 50%;
         }
         
         .btn-print:hover, .btn-close:hover {
@@ -246,7 +274,6 @@ if (!$apt) die("Invalid ticket");
                 <li>Arrive 15 minutes before your appointment time</li>
                 <li>Bring this ticket and your ID card</li>
                 <li>Carry your previous medical reports if any</li>
-                <li>Contact reception for any queries</li>
             </ul>
         </div>
         
