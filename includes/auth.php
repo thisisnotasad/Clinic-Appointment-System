@@ -1,15 +1,30 @@
+<!-- includes/auth.php -->
 <?php
-// includes/auth.php
-require_once __DIR__ . '/config.php';   // safer include
+require_once 'config.php';  // This starts the session
 
-if (!isset($_SESSION['user_id'])) {
-    // Correct absolute path from project root
-    header("Location: " . SITE_URL . "/auth/login.php");
-    exit();
+function isAdmin() {
+    return isset($_SESSION['role']) && $_SESSION['role'] === 'admin';
 }
 
-function isPatient()  { return $_SESSION['role'] === 'patient'; }
-function isDoctor()   { return $_SESSION['role'] === 'doctor'; }
-function isAdmin()    { return $_SESSION['role'] === 'admin'; }
-?>
+function isDoctor() {
+    return isset($_SESSION['role']) && $_SESSION['role'] === 'doctor';
+}
 
+function isPatient() {
+    return isset($_SESSION['role']) && $_SESSION['role'] === 'patient';
+}
+
+// Role-based redirects - call this BEFORE any HTML output
+function redirectBasedOnRole() {
+    if (isAdmin()) {
+        header("Location: admin/dashboard.php");
+        exit();
+    } elseif (isDoctor()) {
+        header("Location: doctor/dashboard.php");
+        exit();
+    } elseif (isPatient()) {
+        header("Location: patient/dashboard.php");
+        exit();
+    }
+}
+?>
