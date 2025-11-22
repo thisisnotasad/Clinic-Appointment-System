@@ -134,60 +134,95 @@ function selectSlot(slot) {
     event.target.classList.add('btn-primary');
 }
 
-// document.getElementById('bookBtn').addEventListener('click', function() {
-//     const doctorId = document.getElementById('doctor').value;
-//     const date = document.getElementById('appointmentDate').value;
 
-//     fetch('process_booking.php', {
-//         method: 'POST',
-//         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-//         body: `doctor_id=${doctorId}&date=${date}&time=${selectedSlot}`
-//     })
-//     .then(r => r.json())
-//     .then(res => {
-//         alert(res.success ? 'Appointment booked successfully!' : res.error);
-//         if (res.success) location.reload();
-//     });
-// });
+// ... (Keep your existing event listeners for specialization, doctor, and date) ...
 
-
+// Updated Booking Logic
 document.getElementById('bookBtn').addEventListener('click', function() {
     const doctorId = document.getElementById('doctor').value;
     const date = document.getElementById('appointmentDate').value;
     const time = selectedSlot;
 
-    // Show loading
-    this.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Booking...';
-    this.disabled = true;
+    // Basic Validation
+    if(!doctorId || !date || !time) {
+        alert("Please select a doctor, date, and time slot.");
+        return;
+    }
+
+    const btn = this;
+    const originalText = btn.innerHTML;
+
+    // Show loading state
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Booking...';
+    btn.disabled = true;
 
     fetch('process_booking.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: `doctor_id=${doctorId}&date=${date}&time=${time}`
     })
-    .then(r => r.json())
-    .then(res => {
-        if (res.success) {
-            // SUCCESS ANIMATION
-            document.getElementById('bookingBtnContainer').innerHTML = `
-                <div class="alert alert-success text-center p-4">
-                    <h4>Booked Successfully!</h4>
-                    <p>${res.message || 'Check your email for confirmation.'}</p>
-                    <button class="btn btn-primary mt-3" onclick="location.reload()">Book Another</button>
-                </div>`;
+    .then(response => {
+        // Check if the response is actually JSON
+        const contentType = response.headers.get("content-type");
+        if (contentType && contentType.indexOf("application/json") !== -1) {
+            return response.json();
         } else {
-            alert(res.error || 'Booking failed');
-            this.innerHTML = 'Confirm Booking';
-            this.disabled = false;
+            // If PHP crashed or outputted raw HTML errors
+            throw new Error("Invalid JSON response from server"); 
         }
     })
-    .catch(() => {
-        alert('Network error. Try again.');
-        this.innerHTML = 'Confirm Booking';
-        this.disabled = false;
+    .then(res => {
+        if (res.success) {
+            // SUCCESS: Replace the entire Card Body with a "Beautiful Card"
+            const cardBody = document.querySelector('.card-body');
+            
+            cardBody.innerHTML = `
+                <div class="text-center py-4 animate__animated animate__fadeIn">
+                    <div class="mb-4">
+                        <i class="fas fa-check-circle text-success" style="font-size: 5rem;"></i>
+                    </div>
+                    <h2 class="fw-bold text-success mb-3">Booking Confirmed!</h2>
+                    <p class="text-muted mb-4">Thank you. Your appointment has been successfully scheduled.</p>
+                    
+                    <div class="card bg-light border-0 p-3 mb-4 mx-auto" style="max-width: 400px;">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="fw-bold text-secondary">Doctor:</span>
+                            <span>${res.details.doctor}</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="fw-bold text-secondary">Date:</span>
+                            <span>${res.details.date}</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="fw-bold text-secondary">Time:</span>
+                            <span>${res.details.time}</span>
+                        </div>
+                         <div class="d-flex justify-content-between">
+                            <span class="fw-bold text-secondary">Token ID:</span>
+                            <span class="text-primary fw-bold">${res.details.token}</span>
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                        <button onclick="location.reload()" class="btn btn-outline-primary px-4">Book Another</button>
+                        <a href="../dashboard.php" class="btn btn-primary px-4">Go to Dashboard</a>
+                    </div>
+                </div>
+            `;
+        } else {
+            // LOGIC ERROR (e.g. Slot taken)
+            alert(res.error || 'Booking failed');
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+        }
+    })
+    .catch(err => {
+        console.error('Fetch error:', err);
+        alert('An unexpected error occurred. Please check your internet or contact support.');
+        btn.innerHTML = originalText;
+        btn.disabled = false;
     });
 });
-
 
 
 </script>

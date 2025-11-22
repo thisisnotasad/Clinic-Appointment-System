@@ -7,6 +7,8 @@ A comprehensive, professional, and fully functional online clinic management sys
 ![Bootstrap](https://img.shields.io/badge/Bootstrap-5.0-purple.svg)
 ![License](https://img.shields.io/badge/License-MIT-green.svg)
 
+![MediCare Clinic](./assets/image/Homepage.png)
+
 ## 🚀 Features
 
 ### Core Functionality
