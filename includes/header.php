@@ -312,7 +312,7 @@ if (isPatient()) {
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="<?= SITE_URL ?>/coming_soon.php?feature=find-doctors">
+                                <a class="nav-link" href="<?= SITE_URL ?>/patient/find_doctors.php">
                                     <i class="fas fa-user-md"></i>Find Doctors
                                 </a>
                             </li>

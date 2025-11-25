@@ -135,7 +135,6 @@ function selectSlot(slot) {
 }
 
 
-// ... (Keep your existing event listeners for specialization, doctor, and date) ...
 
 // Updated Booking Logic
 document.getElementById('bookBtn').addEventListener('click', function() {

@@ -37,10 +37,10 @@
                     <div class="footer-links">
                         <h5 class="text-white mb-3 fw-bold">Quick Links</h5>
                         <ul class="list-unstyled">
-                            <li class="mb-2"><a href="<?= SITE_URL ?>/dashboard.php" class="text-decoration-none" style="color: rgba(255,255,255,0.7); transition: var(--transition);">Dashboard</a></li>
-                            <li class="mb-2"><a href="<?= SITE_URL ?>/appointments.php" class="text-decoration-none" style="color: rgba(255,255,255,0.7); transition: var(--transition);">Appointments</a></li>
-                            <li class="mb-2"><a href="<?= SITE_URL ?>/doctors.php" class="text-decoration-none" style="color: rgba(255,255,255,0.7); transition: var(--transition);">Find Doctors</a></li>
-                            <li class="mb-2"><a href="<?= SITE_URL ?>/medical-records.php" class="text-decoration-none" style="color: rgba(255,255,255,0.7); transition: var(--transition);">Medical Records</a></li>
+                            <li class="mb-2"><a href="#" class="text-decoration-none" style="color: rgba(255,255,255,0.7); transition: var(--transition);">Dashboard</a></li>
+                            <li class="mb-2"><a href="#" class="text-decoration-none" style="color: rgba(255,255,255,0.7); transition: var(--transition);">Appointments</a></li>
+                            <li class="mb-2"><a href="#" class="text-decoration-none" style="color: rgba(255,255,255,0.7); transition: var(--transition);">Find Doctors</a></li>
+                            <li class="mb-2"><a href="#" class="text-decoration-none" style="color: rgba(255,255,255,0.7); transition: var(--transition);">Medical Records</a></li>
                         </ul>
                     </div>
                 </div>
