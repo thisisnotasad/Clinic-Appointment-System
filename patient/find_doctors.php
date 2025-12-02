@@ -120,21 +120,45 @@ $total_doctors = count($doctors);
 
 .search-box {
     position: relative;
+    display: block;
+    width: 100%;
 }
 
-.search-box .form-control {
-    padding-left: 3rem;
+/* Force a consistent input height so icon centering is stable even after icon/font loads */
+.search-box input.form-control {
+    padding-left: 3.5rem;
     border-radius: 8px;
     border: 1px solid var(--gray-light);
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    vertical-align: middle;
+    height: 44px;
+    line-height: 1.2;
 }
 
-.search-box i {
+/* Support both <i> (font) and injected <svg> (FontAwesome JS) */
+.search-box i,
+.search-box svg {
     position: absolute;
-    left: 1rem;
+    left: 12px;
     top: 50%;
     transform: translateY(-50%);
     color: var(--gray);
-    z-index: 2;
+    z-index: 3;
+    pointer-events: none;
+    font-size: 1rem;
+    width: 18px;
+    height: 18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Ensure svg icons scale properly */
+.search-box svg {
+    width: 18px;
+    height: 18px;
 }
 
 .filter-grid {
@@ -491,7 +515,7 @@ $total_doctors = count($doctors);
 
                             <div class="d-flex justify-content-between align-items-center mb-3">
                                 <div>
-                                    <div class="fee-amount">₹<?= number_format($doctor['consultation_fee'], 2) ?></div>
+                                    <div class="fee-amount">$<?= number_format($doctor['consultation_fee'], 2) ?></div>
                                     <div class="fee-label">Consultation Fee</div>
                                 </div>
                                 <span class="experience-badge">

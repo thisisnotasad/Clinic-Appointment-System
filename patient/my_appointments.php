@@ -5,7 +5,7 @@ require_once '../includes/header.php';
 require_once '../includes/db_connect.php'; 
 
 if (!isPatient()) {
-    header("Location: ../dashboard.php");
+    header("Location: ../dashboard.php"); 
     exit();
 }
 
@@ -16,9 +16,11 @@ $filter = $_GET['filter'] ?? 'all';
 $where_clause = "a.patient_id = ?";
 switch($filter) {
     case 'upcoming':
+        // Only pending appointments in the future
         $where_clause .= " AND a.status = 'pending' AND CONCAT(a.appointment_date, ' ', a.appointment_time) >= NOW()";
         break;
     case 'past':
+        // Completed appointments or appointments whose time has passed
         $where_clause .= " AND (a.status = 'completed' OR CONCAT(a.appointment_date, ' ', a.appointment_time) < NOW())";
         break;
     case 'cancelled':
@@ -48,7 +50,7 @@ $appointments = $result->fetch_all(MYSQLI_ASSOC);
         <p class="content-subtitle">Manage and track your healthcare appointments</p>
     </div>
 
-    <!-- Filter Tabs -->
+    <!-- Filter Tabs (Enhanced Spacing) -->
     <div class="content-card mb-4">
         <div class="card-header-custom">
             <h3 class="card-title-custom">
@@ -57,24 +59,25 @@ $appointments = $result->fetch_all(MYSQLI_ASSOC);
         </div>
         <div class="card-body">
             <div class="row">
-                <div class="col-md-8">
-                    <div class="btn-group" role="group">
-                        <a href="?filter=all" class="btn <?= $filter == 'all' ? 'btn-primary' : 'btn-outline-primary' ?>">
+                <div class="col-lg-8 col-md-12 mb-3 mb-lg-0">
+                    <!-- Updated: Replaced btn-group with flex container and added spacing (me-2, mb-2) to the buttons -->
+                    <div class="d-flex flex-wrap">
+                        <a href="?filter=all" class="btn <?= $filter == 'all' ? 'btn-primary' : 'btn-outline-primary' ?> me-2 mb-2">
                             <i class="fas fa-list me-2"></i>All Appointments
                         </a>
-                        <a href="?filter=upcoming" class="btn <?= $filter == 'upcoming' ? 'btn-primary' : 'btn-outline-primary' ?>">
+                        <a href="?filter=upcoming" class="btn <?= $filter == 'upcoming' ? 'btn-primary' : 'btn-outline-primary' ?> me-2 mb-2">
                             <i class="fas fa-clock me-2"></i>Upcoming
                         </a>
-                        <a href="?filter=past" class="btn <?= $filter == 'past' ? 'btn-primary' : 'btn-outline-primary' ?>">
+                        <a href="?filter=past" class="btn <?= $filter == 'past' ? 'btn-primary' : 'btn-outline-primary' ?> me-2 mb-2">
                             <i class="fas fa-history me-2"></i>Past
                         </a>
-                        <a href="?filter=cancelled" class="btn <?= $filter == 'cancelled' ? 'btn-primary' : 'btn-outline-primary' ?>">
+                        <a href="?filter=cancelled" class="btn <?= $filter == 'cancelled' ? 'btn-primary' : 'btn-outline-primary' ?> me-2 mb-2">
                             <i class="fas fa-times me-2"></i>Cancelled
                         </a>
                     </div>
                 </div>
-                <div class="col-md-4 text-end">
-                    <a href="book_appointment.php" class="btn btn-success">
+                <div class="col-lg-4 col-md-12 text-lg-end text-start">
+                    <a href="book_appointment.php" class="btn btn-success w-100 w-lg-auto mt-3 mt-lg-0">
                         <i class="fas fa-calendar-plus me-2"></i>Book New Appointment
                     </a>
                 </div>
@@ -104,8 +107,8 @@ $appointments = $result->fetch_all(MYSQLI_ASSOC);
                                     <div class="date-month"><?= date('M', strtotime($apt['appointment_date'])) ?></div>
                                 </div>
                                 <div class="appointment-info">
-                                    <h5 class="mb-1">Dr. <?= $apt['full_name'] ?></h5>
-                                    <p class="text-muted mb-1"><?= $apt['spec_name'] ?></p>
+                                    <h5 class="mb-1 text-truncate">Dr. <?= $apt['full_name'] ?></h5>
+                                    <p class="text-muted mb-1 text-truncate"><?= $apt['spec_name'] ?></p>
                                     <p class="mb-0">
                                         <i class="fas fa-clock me-1"></i>
                                         <?= date('h:i A', strtotime($apt['appointment_time'])) ?>
@@ -128,11 +131,11 @@ $appointments = $result->fetch_all(MYSQLI_ASSOC);
                                 </a>
                                 
                                 <?php if ($apt['status'] == 'pending' && $isUpcoming): ?>
-                                    <a href="cancel_appointment.php?id=<?= $apt['appointment_id'] ?>" 
-                                       class="btn btn-outline-danger btn-sm" 
-                                       onclick="return confirm('Are you sure you want to cancel this appointment?')">
+                                    <!-- Replaced confirm() with custom modal function for compliance -->
+                                    <button class="btn btn-outline-danger btn-sm" 
+                                            onclick="showCancelModal(<?= $apt['appointment_id'] ?>)">
                                         <i class="fas fa-times me-1"></i>Cancel
-                                    </a>
+                                    </button>
                                 <?php endif; ?>
                                 
                                 <button class="btn btn-outline-info btn-sm" 
@@ -175,11 +178,32 @@ $appointments = $result->fetch_all(MYSQLI_ASSOC);
     </div>
 </div>
 
+<!-- Confirmation Modal (for Cancel) -->
+<div class="modal fade" id="confirmationModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="confirmationModalTitle">Confirm Action</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="confirmationModalContent">
+                <!-- Content injected here -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger" id="confirmationModalConfirmBtn">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <style>
+/* Added responsive grid definition for desktop/tablet */
 .appointments-grid {
     display: grid;
     gap: 1.5rem;
     padding: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); /* Responsive columns */
 }
 
 .appointment-card {
@@ -189,6 +213,7 @@ $appointments = $result->fetch_all(MYSQLI_ASSOC);
     padding: 1.5rem;
     transition: var(--transition);
     box-shadow: var(--box-shadow);
+    overflow: hidden; /* Added to contain inner flex items and text */
 }
 
 .appointment-card:hover {
@@ -206,6 +231,7 @@ $appointments = $result->fetch_all(MYSQLI_ASSOC);
     align-items: center;
     gap: 1rem;
     margin-bottom: 1rem;
+    min-width: 0; /* Ensures flex item can shrink */
 }
 
 .appointment-date {
@@ -230,10 +256,19 @@ $appointments = $result->fetch_all(MYSQLI_ASSOC);
 
 .appointment-info {
     flex: 1;
+    min-width: 0; /* Critical for wrapping text inside flex container */
+}
+
+/* Ensure text inside info wraps */
+.appointment-info h5,
+.appointment-info p {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
 }
 
 .appointment-status {
     text-align: right;
+    min-width: 80px; /* ensure status badge has room */
 }
 
 .status-pending { background: var(--warning); }
@@ -249,21 +284,49 @@ $appointments = $result->fetch_all(MYSQLI_ASSOC);
     display: flex;
     gap: 0.5rem;
     flex-wrap: wrap;
+    margin-top: 1rem; /* Added margin for separation */
 }
 
 @media (max-width: 768px) {
-    .appointment-header {
-        flex-direction: column;
-        text-align: center;
+    /* Filter buttons now stack properly due to flex-wrap and mb-2 */
+    .appointments-grid {
+        gap: 1rem;
+        padding: 1rem;
+    }
+    .appointment-card {
+        padding: 1rem;
     }
     
+    .appointment-header {
+        flex-wrap: wrap; /* Allow status to drop below if space is tight */
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+
+    .appointment-info {
+        flex-grow: 1;
+        flex-basis: 0; /* Allow it to shrink and wrap */
+    }
+
+    .appointment-status {
+        text-align: left; /* Align status badges for better reading on mobile */
+        width: 100%; /* Take full width on small screens */
+        margin-top: 0.5rem;
+    }
+
     .appointment-actions {
-        justify-content: center;
+        flex-direction: column; /* Stack buttons vertically for better touch targets */
+        gap: 0.5rem;
+    }
+    
+    .appointment-actions .btn {
+        width: 100%; /* Make buttons full width */
     }
 }
 </style>
 
 <script>
+// Function to display Doctor Info Modal
 function showDoctorInfo(name, email, phone) {
     const modalContent = document.getElementById('doctorModalContent');
     modalContent.innerHTML = `
@@ -285,6 +348,26 @@ function showDoctorInfo(name, email, phone) {
     `;
     
     const modal = new bootstrap.Modal(document.getElementById('doctorInfoModal'));
+    modal.show();
+}
+
+// Function to display the custom confirmation modal for cancellation
+function showCancelModal(appointmentId) {
+    const modalContent = document.getElementById('confirmationModalContent');
+    const modalTitle = document.getElementById('confirmationModalTitle');
+    const confirmButton = document.getElementById('confirmationModalConfirmBtn');
+
+    modalTitle.textContent = 'Confirm Cancellation';
+    modalContent.innerHTML = '<p>Are you sure you want to cancel this appointment? This action cannot be undone and may incur a fee if within the cancellation window.</p>';
+    
+    // Set the action for the confirm button
+    confirmButton.onclick = () => {
+        // Navigate to the cancellation endpoint
+        window.location.href = `cancel_appointment.php?id=${appointmentId}`;
+    };
+
+    // Show the modal
+    const modal = new bootstrap.Modal(document.getElementById('confirmationModal'));
     modal.show();
 }
 </script>

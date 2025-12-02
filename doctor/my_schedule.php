@@ -53,6 +53,7 @@ $days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Satu
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 1.5rem;
     margin-bottom: 2rem;
+    padding: 1rem;
 }
 
 .schedule-card {
@@ -172,7 +173,11 @@ $days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Satu
 
 .action-buttons {
     margin-top: 2rem;
-    text-align: center;
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
 }
 
 .btn-custom {
@@ -214,6 +219,48 @@ $days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Satu
     border-color: var(--primary);
     color: var(--primary);
     background: rgba(74, 108, 247, 0.05);
+}
+
+/* Action buttons responsiveness: make buttons share available space on larger screens and full-width on very small screens */
+.action-buttons .btn-custom,
+.action-buttons .btn-outline-custom {
+    flex: 0 1 auto;
+    min-width: 140px;
+}
+
+@media (max-width: 576px) {
+    .action-buttons {
+        gap: 0.5rem;
+    }
+    .action-buttons .btn-custom,
+    .action-buttons .btn-outline-custom {
+        flex: 1 1 100%;
+        min-width: 0;
+        width: 100%;
+    }
+}
+
+/* Provide consistent .btn-back and .btn-update styles used elsewhere */
+.btn-back {
+    background: white;
+    border: 1px solid var(--gray-light);
+    color: var(--dark);
+    border-radius: 8px;
+    padding: 0.6rem 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-update {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    border: none;
+    color: white;
+    border-radius: 8px;
+    padding: 0.6rem 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
 @media (max-width: 768px) {

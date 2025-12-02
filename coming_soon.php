@@ -4,7 +4,7 @@ require_once 'includes/auth.php';
 require_once 'includes/header.php';
 ?>
 
-<div class="container-fluid">
+<div class="container-fluid mt-4">
     <div class="row justify-content-center">
         <div class="col-lg-6 col-md-8">
             <div class="content-card text-center">

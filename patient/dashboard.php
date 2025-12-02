@@ -62,7 +62,7 @@ $recent_appointments = $conn->query("
                 </div>
                 <h3 class="stat-number"><?= $conn->query("SELECT COUNT(DISTINCT doctor_id) as doctors FROM appointments WHERE patient_id = $user_id")->fetch_assoc()['doctors'] ?></h3>
                 <p class="stat-label">My Doctors</p>
-                <a href="book_appointment.php" class="btn btn-sm btn-outline-primary">Find More</a>
+                <a href="find_doctors.php" class="btn btn-sm btn-outline-primary">Find More</a>
             </div>
         </div>
         <div class="col-xl-3 col-md-6 mb-4">

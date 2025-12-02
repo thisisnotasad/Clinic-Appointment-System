@@ -138,6 +138,48 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     color: white;
 }
 
+/* Button styles matched to leaves.php for consistent appearance */
+.btn-back {
+    background: white;
+    border: 1px solid var(--gray-light);
+    border-radius: 8px;
+    padding: 0.75rem 1.5rem;
+    font-weight: 500;
+    color: var(--dark);
+    transition: var(--transition);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-update {
+    background: var(--primary);
+    border: none;
+    border-radius: 8px;
+    padding: 0.75rem 1.5rem;
+    font-weight: 500;
+    color: white;
+    transition: var(--transition);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-back:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    background: rgba(74, 108, 247, 0.05);
+}
+
+.btn-update:hover {
+    background: var(--primary-dark);
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(74, 108, 247, 0.2);
+}
+
 .modal-custom .modal-content {
     border-radius: var(--border-radius);
     border: none;

@@ -308,7 +308,7 @@ $pending_today = $conn->query("SELECT COUNT(*) as pending FROM appointments WHER
                             <th>Time</th>
                             <th>Patient</th>
                             <th>Contact</th>
-                            <th>Reason for Visit</th>
+                            <th>Reason</th>
                             <th>Status</th>
                             <th>Action</th>
                         </tr>
